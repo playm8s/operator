@@ -1,0 +1,31 @@
+{
+    "compilerOptions": {
+        "outDir": "bin",
+        "target": "es2016",
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "declaration": true,
+        "sourceMap": true,
+        "stripInternal": true,
+        "experimentalDecorators": true,
+        "noFallthroughCasesInSwitch": true,
+        "forceConsistentCasingInFileNames": true,
+        "strict": true
+    },
+    "files": [
+        "index.ts",
+        "pm8s/index.ts",
+        "pm8s/v1/gameserverBase.ts",
+        "pm8s/v1/gameserverBaseList.ts",
+        "pm8s/v1/gameserverBasePatch.ts",
+        "pm8s/v1/gameserverOverlay.ts",
+        "pm8s/v1/gameserverOverlayList.ts",
+        "pm8s/v1/gameserverOverlayPatch.ts",
+        "pm8s/v1/index.ts",
+        "provider.ts",
+        "types/index.ts",
+        "types/input.ts",
+        "types/output.ts",
+        "utilities.ts"
+    ]
+}

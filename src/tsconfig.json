@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "lib": [
+      "es2024"
+    ],
+    "module": "nodenext",
+    "outDir": "./dist",
+    "resolveJsonModule": true,
+    "rootDir": ".",
+    "strict": false,
+    "target": "es2024",
+    "useUnknownInCatchVariables": false
+  },
+  "include": [
+    "**/*.ts",
+    "**/*.mts",
+  ]
+}
