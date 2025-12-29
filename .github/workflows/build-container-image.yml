@@ -58,8 +58,8 @@ jobs:
         uses: docker/bake-action@v6
         with:
           push: true
-          source: ./src
+          source: .
           files: |
-            ./docker-bake.hcl
+            ./src/docker-bake.hcl
             cwd://${{ steps.meta.outputs.bake-file }}
           targets: build
