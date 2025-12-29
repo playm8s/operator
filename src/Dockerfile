@@ -44,4 +44,4 @@ RUN set -exu \
 
 ENTRYPOINT ["/bin/sh"]
 
-CMD ["-c", "/usr/bin/node /app/main.mjs"]
+CMD ["-c", "node /app/main.mjs"]
