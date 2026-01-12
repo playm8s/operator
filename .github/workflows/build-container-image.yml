@@ -43,7 +43,6 @@ jobs:
           cat <<EOF >> $HOME/.npmrc
           //npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}
           @playm8s:registry=https://npm.pkg.github.com/
-          always-auth=true
           EOF
           npm install
           make
