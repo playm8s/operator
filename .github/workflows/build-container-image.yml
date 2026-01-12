@@ -39,10 +39,11 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          export NODE_ENV=development
           echo "//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}" | tee -a $HOME/.npmrc \
           echo "@playm8s:registry=https://npm.pkg.github.com/" | tee -a $HOME/.npmrc \
           echo "always-auth=true" | tee -a $HOME/.npmrc \
-          npm install --include=dev --legacy-peer-deps
+          npm install --legacy-peer-deps
           make
 
       - name: Set up QEMU

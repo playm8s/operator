@@ -14,7 +14,7 @@ RUN --mount=type=secret,id=GITHUB_TOKEN,env=GITHUB_TOKEN \
   && echo "@playm8s:registry=https://npm.pkg.github.com/" | tee -a $HOME/.npmrc \
   && echo "always-auth=true" | tee -a $HOME/.npmrc \
   && cd /app \
-  && npm install --include=prod  --omit=dev --legacy-peer-deps \
+  && npm install --legacy-peer-deps \
   && rm -f $HOME/.npmrc
 
 COPY --chown=node:node dist/ /app
