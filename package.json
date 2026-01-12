@@ -21,7 +21,7 @@
   },
   "dependencies": {
     "@dot-i/k8s-operator": "^3.1.0",
-    "@playm8s/crds": "^0.4.53",
+    "@playm8s/crds": "^0.4.54",
     "winston": "^3.19.0"
   }
 }
