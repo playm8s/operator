@@ -2,9 +2,9 @@
 
 import { default as winston } from 'winston';
 
-import { pm8s as pm8s } from './api/index.js';
+// import { pm8s as pm8s } from './api/index.js';
 
-import { PM8S_LOGO as PM8S_LOGO } from './lib/logo.mjs';
+import { PM8S_LOGO as PM8S_LOGO } from '../lib/logo.mjs';
 
 const PM8S_LOG_LEVEL = process.env.PM8S_LOG_LEVEL || 'debug';
 

@@ -29,6 +29,17 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v5
 
+      - name: Setup nodejs
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Lint, Compile Typescript
+        shell: bash
+        run: |
+          npm install --include=dev --legacy-peer-deps
+          make
+
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
 
@@ -42,8 +53,8 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Extract metadata (tags, labels) for Docker
-        id: meta
+      - name: Extract metadata (tags, labels) for Docker (Operator image build)
+        id: docker_meta
         uses: docker/metadata-action@v5
         with:
           images: ${{ env.REGISTRY }}/${{ github.repository }}
@@ -51,15 +62,15 @@ jobs:
             type=ref,event=branch
             type=ref,event=tag
             type=ref,event=pr
-            type=sha,format=short
+            type=sha,format=long
             type=raw,value=latest,priority=900,enable={{is_default_branch}}
 
-      - name: Build and Push
+      - name: Build and Push Operator Image
         uses: docker/bake-action@v6
         with:
           push: true
           source: .
           files: |
-            ./src/docker-bake.hcl
-            cwd://${{ steps.meta.outputs.bake-file }}
+            ./docker-bake.hcl
+            cwd://${{ steps.docker_meta.outputs.bake-file }}
           targets: build

@@ -6,11 +6,16 @@ RUN set -exu \
   && apk add --no-cache \
     make \
     bash \
-    curl
+    curl \
+    python3 \
+    g++ \
+    gcc
 
 RUN set -exu \
   && curl -sSL https://github.com/pulumi/crd2pulumi/releases/download/v1.6.0/crd2pulumi-v1.6.0-linux-amd64.tar.gz \
-      | tar -xzv -C /usr/bin crd2pulumi
+      | tar -xzv -C /usr/bin crd2pulumi \
+  && curl -sSL https://github.com/arttor/helmify/releases/download/v0.4.19/helmify_Linux_x86_64.tar.gz \
+      | tar -xzv -C /usr/bin helmify
 
 WORKDIR /build
 
@@ -33,7 +38,7 @@ USER node
 
 WORKDIR /app
 
-COPY --from=builder --chown=node:node /build/dist/app /app
+COPY --from=builder --chown=node:node /build/bin/app /app
 COPY --chown=node:node package.json package-lock.json /app/
 
 ENV NODE_ENV=production

@@ -8,10 +8,11 @@
     "module": "nodenext",
     "outDir": "./dist",
     "resolveJsonModule": true,
-    "rootDir": ".",
+    "rootDir": "./src",
     "strict": false,
     "target": "es2024",
-    "useUnknownInCatchVariables": false
+    "useUnknownInCatchVariables": false,
+    "declaration": true
   },
   "include": [
     "**/*.ts",
