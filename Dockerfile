@@ -10,12 +10,11 @@ ENV NODE_ENV=production
 
 RUN --mount=type=secret,id=GITHUB_TOKEN,env=GITHUB_TOKEN \
   set -exu \
-  && cat <<EOF >> $HOME/.npmrc
-  //npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}
-  @playm8s:registry=https://npm.pkg.github.com/
-  EOF \
+  && echo "//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}" | tee -a $HOME/.npmrc \
+  && echo "@playm8s:registry=https://npm.pkg.github.com/" | tee -a $HOME/.npmrc \
+  && echo "always-auth=true" | tee -a $HOME/.npmrc \
   && cd /app \
-  && npm install --legacy-peer-deps \
+  && npm install \
   && rm -f $HOME/.npmrc
 
 COPY --chown=node:node dist/ /app
