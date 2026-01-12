@@ -32,7 +32,7 @@ git add package.json package-lock.json
 
 git commit -m "${VERSION} - $*"
 
-git tag "${VERSION}-build"
+git tag "${VERSION}"
 
 git push \
-&& git push --tags
+&& git push --tags || git tag -d "${VERSION}"

@@ -1,6 +1,6 @@
 'use strict';
 
-export const PM8S_LOGO = `
+export const PM8S_LOGO: string = `
 
                                 ▒▒▒  ░░░░░░░░░░░░░░░                                
                   ░▒▒▒▒      ░░ ▒▒▒▒▒▒▒▒  ░░░░    ░▒▒▒▒ ░░░                         

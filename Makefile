@@ -4,13 +4,10 @@ SHELL = /usr/bin/env bash -o pipefail
 all: lint build
 
 lint:
-	npm run test
+	npx eslint src/
 
 build:
 	npx tsc
 
-docker-build-dev: lint build
-	docker build --platform linux/amd64 --tag local.dev/playm8s/operator:latest .
-
-docker-run-dev: docker-build-dev
-	docker run --rm local.dev/playm8s/operator:latest -- --login
+dev: build
+	node dist/main.mjs
