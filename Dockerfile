@@ -12,7 +12,6 @@ RUN --mount=type=secret,id=GITHUB_TOKEN,env=GITHUB_TOKEN \
   set -exu \
   && echo "//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}" | tee -a $HOME/.npmrc \
   && echo "@playm8s:registry=https://npm.pkg.github.com/" | tee -a $HOME/.npmrc \
-  && echo "always-auth=true" | tee -a $HOME/.npmrc \
   && cd /app \
   && npm install \
   && rm -f $HOME/.npmrc
