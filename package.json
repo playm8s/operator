@@ -20,7 +20,7 @@
     "typescript": "^5.9.3"
   },
   "dependencies": {
-    "@dot-i/k8s-operator": "^3.1.0",
+    "@dot-i/k8s-operator": "github:chaosfinity/k8s-operator-node#esmSupport",
     "@playm8s/crds": "^0.4.57",
     "winston": "^3.19.0"
   }
