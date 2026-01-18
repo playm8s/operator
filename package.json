@@ -21,7 +21,7 @@
     "typescript": "^5.9.3"
   },
   "dependencies": {
-    "@playm8s/crds": "^0.4.57",
+    "@playm8s/crds": "^0.4.64",
     "@thehonker/k8s-operator": "^3.1.1-alpha.9",
     "winston": "^3.19.0"
   }
