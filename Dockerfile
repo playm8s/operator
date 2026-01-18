@@ -4,19 +4,18 @@ USER node
 
 WORKDIR /build
 
-COPY --chown=node:node package.json package-lock.json tsconfig.json eslint.config.mjs Makefile /build/
-COPY .npmrc /home/node/.npmrc
+COPY --chown=node:node package.json package-lock.json tsconfig.json eslint.config.mjs Makefile .npmrc /build/
 
 ENV NODE_ENV=development
 
 RUN --mount=type=secret,id=GITHUB_TOKEN,env=GITHUB_TOKEN \
   set -exu \
-  && echo "//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}" | tee -a /home/node/.npmrc
+  && echo "//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}" | tee -a .npmrc
 
 RUN set -exu \
   && cd /build \
   && npm install \
-  && rm -f /home/node/.npmrc
+  && rm -f .npmrc
 
 COPY --chown=node:node src/ /app/src
 
@@ -31,11 +30,16 @@ WORKDIR /app
 
 ENV NODE_ENV=production
 
-COPY --chown=node:node package.json package-lock.json /app/
+COPY --chown=node:node package.json package-lock.json .npmrc /app/
+
+RUN --mount=type=secret,id=GITHUB_TOKEN,env=GITHUB_TOKEN \
+  set -exu \
+  && echo "//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}" | tee -a .npmrc
 
 RUN set -exu \
   && cd /app \
-  && npm install
+  && npm install \
+  && rm -f .npmrc
 
 COPY --from=builder /build/dist /app/dist
 
