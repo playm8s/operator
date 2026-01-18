@@ -11,7 +11,7 @@ USER node
 
 WORKDIR /build
 
-COPY --chown=node:node package.json package-lock.json tsconfig.json eslint.config.mjs Makefile .npmrc src /build/
+COPY --chown=node:node . /build
 
 ENV NODE_ENV=development
 
