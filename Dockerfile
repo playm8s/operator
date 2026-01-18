@@ -4,6 +4,7 @@ USER root
 
 RUN set -exu \
   && apk add --no-cache \
+    bash \
     make
 
 USER node
