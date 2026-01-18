@@ -11,7 +11,7 @@ USER node
 
 WORKDIR /build
 
-COPY --chown=node:node package.json package-lock.json tsconfig.json eslint.config.mjs Makefile .npmrc /build/
+COPY --chown=node:node package.json package-lock.json tsconfig.json eslint.config.mjs Makefile .npmrc src/ /build/
 
 ENV NODE_ENV=development
 
@@ -21,12 +21,7 @@ RUN --mount=type=secret,id=GITHUB_TOKEN,env=GITHUB_TOKEN \
 
 RUN set -exu \
   && cd /build \
-  && npm install
-
-COPY --chown=node:node src/ /build/src
-
-RUN set -exu \
-  && cd /build \
+  && npm install --include=dev \
   && make ci \
   && rm -f .npmrc
 
