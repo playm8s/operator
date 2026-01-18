@@ -3,6 +3,8 @@ SHELL = /usr/bin/env bash -o pipefail
 
 all: lint build
 
+ci: lint build
+
 lint:
 	npx eslint src/
 

@@ -1,6 +1,6 @@
 {
   "name": "@playm8s/operator",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "the playm8s operator",
   "keywords": [],
   "main": "dist/main.mjs",

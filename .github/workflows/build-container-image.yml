@@ -29,24 +29,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v5
 
-      - name: Setup nodejs
-        uses: actions/setup-node@v4
-        with:
-          node-version: 24
-
-      - name: Lint, Compile Typescript
-        shell: bash
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          export NODE_ENV=development
-          cat <<EOF >> $HOME/.npmrc
-          //npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}
-          @playm8s:registry=https://npm.pkg.github.com/
-          EOF
-          npm install
-          make
-
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
 
