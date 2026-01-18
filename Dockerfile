@@ -24,7 +24,7 @@ RUN set -exu \
   && npm install \
   && rm -f .npmrc
 
-COPY --chown=node:node src/ /app/src
+COPY --chown=node:node src/ /build/src
 
 RUN set -exu \
   && cd /build \
