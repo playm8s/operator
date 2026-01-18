@@ -1,5 +1,11 @@
 FROM docker.io/node:24-alpine AS builder
 
+USER root
+
+RUN set -exu \
+  && apk add --no-cache \
+    make
+
 USER node
 
 WORKDIR /build
