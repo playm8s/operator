@@ -13,6 +13,7 @@
   "type": "module",
   "devDependencies": {
     "@types/node": "^18",
+    "@types/ws": "^8.18.1",
     "@typescript-eslint/eslint-plugin": "^8.52.0",
     "@typescript-eslint/parser": "^8.50.1",
     "eslint": "^9.39.2",
@@ -20,8 +21,8 @@
     "typescript": "^5.9.3"
   },
   "dependencies": {
-    "@dot-i/k8s-operator": "github:chaosfinity/k8s-operator-node#esmSupport",
     "@playm8s/crds": "^0.4.57",
+    "@thehonker/k8s-operator": "^3.1.1-alpha.9",
     "winston": "^3.19.0"
   }
 }
