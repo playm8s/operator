@@ -1,6 +1,6 @@
 {
   "name": "@playm8s/operator",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "the playm8s operator",
   "keywords": [],
   "main": "dist/main.mjs",
@@ -8,10 +8,14 @@
     "node": ">=24.0.0"
   },
   "scripts": {
-    "test": "npx eslint src/"
+    "test": "npx eslint src/",
+    "build": "npm run test && npx tsc",
+    "dev": "npm run build && node dist/main.mjs",
+    "update-libraries": "npm install --save @thehonker/k8s-operator@latest @playm8s/crds@latest"
   },
   "type": "module",
   "devDependencies": {
+    "@types/express": "^5.0.6",
     "@types/node": "^18",
     "@types/ws": "^8.18.1",
     "@typescript-eslint/eslint-plugin": "^8.52.0",
@@ -21,8 +25,10 @@
     "typescript": "^5.9.3"
   },
   "dependencies": {
-    "@playm8s/crds": "^0.4.64",
+    "@playm8s/crds": "^0.4.70",
     "@thehonker/k8s-operator": "^3.1.1-alpha.9",
+    "express": "^5.2.1",
+    "prom-client": "^15.1.3",
     "winston": "^3.19.0"
   }
 }

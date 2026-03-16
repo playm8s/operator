@@ -1,9 +1,9 @@
-name: Build Operator Image
+name: Build Image
 
 on:
   push:
-    branches:
-      - main
+    tags:
+      - '*'
 
   workflow_dispatch:
 
@@ -12,7 +12,7 @@ permissions:
   packages: write
 
 concurrency:
-  group: playm8s-operator
+  group: ${{ github.repository }}
   cancel-in-progress: false
 
 defaults:

@@ -1,11 +1,11 @@
 'use strict';
 
 import * as K8s from '@kubernetes/client-node';
-
+import express, { Application, Request, Response } from 'express';
 import { default as Operator } from '@thehonker/k8s-operator';
 
 // Critical
-import { PM8S_LOGO as PM8S_LOGO } from './lib/logo.mjs';
+import { PM8S_LOGO } from './lib/logo.mjs';
 
 // Logging
 import { log, opLogger } from './lib/logging.mjs';
@@ -15,6 +15,16 @@ import { managedCrd } from './lib/managers/types.mjs';
 import { managedCrds as Gameserver } from './lib/managers/pm8s.io.v1.Gameserver.mjs';
 import { managedCrds as GameserverBase } from './lib/managers/pm8s.io.v1.GameserverBase.mjs';
 import { managedCrds as GameserverOverlay } from './lib/managers/pm8s.io.v1.GameserverOverlay.mjs';
+
+// Import utility functions
+import { parseBool as parseBoolUtil } from './lib/functions.mjs';
+
+// Import API routes
+import apiRoutes from './api/routes.mjs';
+
+// Import metrics
+import { k8sActiveWatches } from './lib/metrics.mjs';
+
 const managedCrds: managedCrd[] = [];
 managedCrds.push(...Gameserver);
 managedCrds.push(...GameserverBase);
@@ -27,11 +37,16 @@ const PM8S_NAMESPACE = process.env.PM8S_NAMESPACE || 'pm8s-system';
 // Should the operator only watch its own namespace for CRs
 const PM8S_WATCH_OTHER_NAMESPACES_ENV =
   process.env.PM8S_WATCH_OTHER_NAMESPACES || 'false';
-const PM8S_WATCH_OTHER_NAMESPACES = parseBool(PM8S_WATCH_OTHER_NAMESPACES_ENV);
+const PM8S_WATCH_OTHER_NAMESPACES = parseBoolUtil(PM8S_WATCH_OTHER_NAMESPACES_ENV);
 
 // Setup some k8s stuff early
 const kc = new K8s.KubeConfig();
-kc.loadFromDefault();
+const KUBE_IN_CLUSTER_CONFIG = parseBoolUtil(process.env.KUBE_IN_CLUSTER_CONFIG);
+if (KUBE_IN_CLUSTER_CONFIG) {
+  kc.loadFromCluster();
+} else {
+  kc.loadFromDefault();
+}
 const op = new Operator(kc, new opLogger());
 
 // Signal handlers
@@ -41,11 +56,51 @@ process.on('SIGINT', () => exit('SIGINT'));
 // Start of logic
 console.error(PM8S_LOGO);
 log.info('playm8s-operator starting up...');
+
+// Ensure CRDs are installed ahead of time
+log.info('checking for crds');
 if (!(await checkCRDs())) {
   log.error('crds not found! exiting...');
   await exit('crds not found', 1);
 }
+
+// Setup resource watchers so we know when CR objects change
 await setupResourceWatchers();
+
+// Setup HTTP API server
+setupHttpServer();
+
+/**
+ * Setup HTTP API server
+ */
+function setupHttpServer() {
+  const app: Application = express();
+  const port = process.env.HTTP_API_PORT || '9000';
+
+  // Middleware
+  app.use(express.json());
+
+  // API routes
+  app.use('/api', apiRoutes);
+
+  // Root endpoint
+  app.get('/', (req: Request, res: Response) => {
+    res.status(200).json({
+      message: 'playm8s Operator API',
+      timestamp: new Date().toISOString(),
+    });
+  });
+
+  // Start server
+  const server = app.listen(port, () => {
+    log.info(`HTTP API server listening on port ${port}`);
+  });
+
+  // Handle server errors
+  server.on('error', (err: Error) => {
+    log.error('HTTP API server error', err);
+  });
+}
 
 /**
  * Cleanup before exit
@@ -65,14 +120,14 @@ async function exit(reason: string, exitcode: number = 0) {
  * Ensure all our CRDs are installed in the cluster
  */
 async function checkCRDs() {
-  log.info('checking for crds');
   const customObjectsApi = kc.makeApiClient(K8s.CustomObjectsApi);
   const crds: K8s.V1APIResourceList[] = [];
   for (let i = 0; i < managedCrds.length; i++) {
     try {
       const found = await customObjectsApi.getAPIResources(managedCrds[i]);
       crds.push(found);
-    } catch (error) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
       if (error.message.includes('404')) {
         return false;
       }
@@ -89,20 +144,18 @@ async function checkCRDs() {
  * Setup resource watches in k8s api
  */
 async function setupResourceWatchers() {
-  managedCrds.forEach(async (crd: managedCrd) => {
+  let activeWatches = 0;
+  
+  for (const crd of managedCrds) {
     await op.watchResource(
       crd.group,
       crd.version,
       crd.plural,
       crd.handler,
-      PM8S_WATCH_OTHER_NAMESPACES ? PM8S_NAMESPACE : undefined
+      PM8S_WATCH_OTHER_NAMESPACES ? undefined : PM8S_NAMESPACE
     );
-  });
+    activeWatches++;
+    k8sActiveWatches.set(activeWatches);
+  }
 }
 
-function parseBool(value: string | undefined): boolean {
-  if (value) {
-    return value.toLowerCase() === 'true' || value === '1';
-  }
-  return false;
-}
