@@ -32,12 +32,12 @@ managedCrds.push(...GameserverOverlay);
 
 // Get some runtime config from envvars
 // Namespace the operator lives in
-const PM8S_NAMESPACE = process.env.PM8S_NAMESPACE || 'pm8s-system';
+const NAMESPACE = process.env.NAMESPACE || 'pm8s-system';
 
 // Should the operator only watch its own namespace for CRs
-const PM8S_WATCH_OTHER_NAMESPACES_ENV =
-  process.env.PM8S_WATCH_OTHER_NAMESPACES || 'false';
-const PM8S_WATCH_OTHER_NAMESPACES = parseBoolUtil(PM8S_WATCH_OTHER_NAMESPACES_ENV);
+const WATCH_OTHER_NAMESPACES_ENV =
+  process.env.WATCH_OTHER_NAMESPACES || 'false';
+const WATCH_OTHER_NAMESPACES = parseBoolUtil(WATCH_OTHER_NAMESPACES_ENV);
 
 // Setup some k8s stuff early
 const kc = new K8s.KubeConfig();
@@ -152,7 +152,7 @@ async function setupResourceWatchers() {
       crd.version,
       crd.plural,
       crd.handler,
-      PM8S_WATCH_OTHER_NAMESPACES ? undefined : PM8S_NAMESPACE
+      WATCH_OTHER_NAMESPACES ? undefined : NAMESPACE
     );
     activeWatches++;
     k8sActiveWatches.set(activeWatches);

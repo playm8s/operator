@@ -35,11 +35,11 @@ router.get('/metrics', async (req: Request, res: Response) => {
 // Authentication middleware
 const authenticateToken = (req: Request, res: Response, next: NextFunction) => {
   const authHeader = req.headers.authorization;
-  const token = process.env.PM8S_OPERATOR_API_TOKEN;
+  const token = process.env.OPERATOR_API_TOKEN;
 
   // If no token is configured, allow all requests (dev mode)
   if (!token) {
-    log.warn('No PM8S_OPERATOR_API_TOKEN configured - API disabled');
+    log.warn('No OPERATOR_API_TOKEN configured - API disabled');
     return res.status(401).json({ error: 'API Token not configured' });
   }
 

@@ -5,11 +5,11 @@ import { default as winston } from 'winston';
 import { OperatorLogger } from '@thehonker/k8s-operator';
 
 // Loglevel
-const PM8S_LOG_LEVEL: string = process.env.PM8S_LOG_LEVEL || 'debug';
+const LOG_LEVEL: string = process.env.LOG_LEVEL || 'debug';
 
 // Setup logging
 export const log: winston.Logger = winston.createLogger({
-  level: PM8S_LOG_LEVEL,
+  level: LOG_LEVEL,
   defaultMeta: {},
   transports: [],
 });

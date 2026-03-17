@@ -217,7 +217,7 @@ async function createGameserverDeployment(
   const containerEnvVars: K8s.V1EnvVar[] = [
     {
       name: 'NAMESPACE',
-      value: process.env.PM8S_NAMESPACE || 'pm8s-system',
+      value: process.env.NAMESPACE || 'pm8s-system',
     },
     {
       name: 'RESOURCE_NAME',
