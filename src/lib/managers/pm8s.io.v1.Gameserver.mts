@@ -147,7 +147,7 @@ async function reconcileResource(
       return;
     }
 
-    const item = gameserverResponse as pm8s.Gameserver.GameserverResource;
+    const item = gameserverResponse.body as pm8s.Gameserver.gameserverResource;
     const namespace = item.metadata?.namespace;
     const name = item.metadata?.name;
 
@@ -179,7 +179,7 @@ async function reconcileResource(
       log.info(
         `Creating deployment ${deploymentName} in namespace ${namespace}`
       );
-      await createGameserverDeployment(appsV1Api, coreV1Api, namespace, name, item);
+      await createGameserverDeployment(appsV1Api, coreV1Api, namespace, name, item as pm8s.Gameserver.gameserverResource);
     }
 
     log.debug('Gameserver reconciliation completed successfully');
@@ -193,7 +193,7 @@ async function createGameserverDeployment(
   coreV1Api: K8s.CoreV1Api,
   namespace: string,
   gameserverName: string,
-  item: pm8s.Gameserver.GameserverResource
+  item: pm8s.Gameserver.gameserverResource
 ): Promise<void> {
   log.debug(
     `Creating gameserver deployment for "${gameserverName}" in namespace ${namespace}`
